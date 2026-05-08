@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: quizbot_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-quizbot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-your_password_here}
+      POSTGRES_DB: ${POSTGRES_DB:-quizbot}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - quizbot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quizbot} -d ${POSTGRES_DB:-quizbot}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: quizbot_redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - quizbot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Telegram Quiz Bot
+  bot:
+    build: .
+    container_name: quizbot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - ADMIN_IDS=${ADMIN_IDS}
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-quizbot}:${POSTGRES_PASSWORD:-your_password_here}@postgres:5432/${POSTGRES_DB:-quizbot}
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=${DEBUG:-False}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+      - ./alembic:/app/alembic
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - quizbot_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import asyncio; from bot import bot; asyncio.run(bot.get_me())"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx (Optional - for reverse proxy)
+  nginx:
+    image: nginx:alpine
+    container_name: quizbot_nginx
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - bot
+    networks:
+      - quizbot_network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  quizbot_network:
+    driver: bridge

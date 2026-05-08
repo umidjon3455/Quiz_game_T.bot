@@ -1,0 +1,13 @@
+aiogram==3.4.1
+sqlalchemy==2.0.49
+asyncpg==0.28.0
+psycopg2-binary==2.9.9
+redis==7.4.0
+apscheduler==3.11.2
+python-dotenv==1.0.0
+alembic==1.14.1
+colorlog==6.10.1
+aiofiles==23.2.1
+pydantic-settings==2.1.0
+pydantic==2.5.3
+typing-extensions==4.7.1
