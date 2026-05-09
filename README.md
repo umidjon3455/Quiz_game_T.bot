@@ -2,7 +2,7 @@
 
 A professional, modern, and feature-rich Telegram Quiz Bot built with Python and Aiogram 3.x. This bot provides an engaging quiz experience with gamification elements, user profiles, leaderboards, achievements, and comprehensive admin panel.
 
-## ✨ Features.
+## ✨ Features
 
 ### 🎮 Core Quiz System
 - **Multiple Game Modes**: Classic, Timed, Endless, Survival, Duel, Mixed
