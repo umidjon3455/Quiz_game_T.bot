@@ -31,14 +31,14 @@ async def setup_bot() -> None:
     
     # Set bot commands
     commands = [
-        BotCommand(command="/start", description="🚀 Start the bot"),
-        BotCommand(command="/help", description="❓ Get help"),
-        BotCommand(command="/profile", description="👤 View your profile"),
-        BotCommand(command="/leaderboard", description="🏆 View leaderboard"),
-        BotCommand(command="/daily", description="🎁 Claim daily bonus"),
-        BotCommand(command="/quiz", description="🎮 Start a quiz"),
-        BotCommand(command="/admin", description="👑 Admin panel"),
-        BotCommand(command="/cancel", description="❌ Cancel current action"),
+        BotCommand(command="start", description="🚀 Start the bot"),
+        BotCommand(command="help", description="❓ Get help"),
+        BotCommand(command="profile", description="👤 View your profile"),
+        BotCommand(command="leaderboard", description="🏆 View leaderboard"),
+        BotCommand(command="daily", description="🎁 Claim daily bonus"),
+        BotCommand(command="quiz", description="🎮 Start a quiz"),
+        BotCommand(command="admin", description="👑 Admin panel"),
+        BotCommand(command="cancel", description="❌ Cancel current action"),
     ]
     
     await bot.set_my_commands(commands)
