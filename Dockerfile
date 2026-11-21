@@ -35,7 +35,7 @@ EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import asyncio; from bot import bot; asyncio.run(bot.get_me())" || exit 1
+    CMD python -c "import asyncio; from bot.bot import bot; asyncio.run(bot.get_me())" || exit 1
 
 # Default command
-CMD ["python", "bot/bot.py"]
+CMD ["python", "-m", "bot.bot"]
