@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 async def setup_bot() -> None:
     """Setup bot commands and other bot-specific configurations."""
-    from bot import bot
+    from .bot import bot
     
     # Set bot commands
     commands = [
