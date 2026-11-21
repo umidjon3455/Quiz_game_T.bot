@@ -17,6 +17,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from config import settings
 from database.redis_client import redis_client
 from .loader import setup_bot, setup_handlers, setup_middlewares
+from .logging_config import prepare_log_file
 
 
 # Configure logging
@@ -25,7 +26,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler("logs/bot.log", encoding="utf-8")
+        logging.FileHandler(prepare_log_file(), encoding="utf-8")
     ]
 )
 

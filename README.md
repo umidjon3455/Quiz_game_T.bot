@@ -90,7 +90,7 @@ alembic upgrade head
 #### 5. Start the Bot
 ```bash
 # Run directly
-python bot/bot.py
+python -m bot.bot
 
 # Or with Docker Compose
 docker-compose up -d

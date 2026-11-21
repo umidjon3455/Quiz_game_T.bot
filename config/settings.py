@@ -67,7 +67,6 @@ class Settings(BaseSettings):
     rate_limit_per_second: int = Field(default=5, env="RATE_LIMIT_PER_SECOND")
     rate_limit_per_minute: int = Field(default=30, env="RATE_LIMIT_PER_MINUTE")
     
-    @property
     def is_admin(self, user_id: int) -> bool:
         """Check if user is admin."""
         return user_id in self.admin_ids
